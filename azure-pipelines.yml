@@ -1,0 +1,86 @@
+trigger:
+ branches:
+   include:
+     - main
+
+pool: B18_Agent
+
+stages:
+  - stage: terraform_install_initfmtvalidatePlan
+    displayName: Terraform init fmt validate plan
+    jobs:
+      - job: tf_installer_initplan
+        steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+            backendServiceArm: 'B18_Service_Connection'
+            backendAzureRmStorageAccountName: 'infrabackendstg'
+            backendAzureRmContainerName: 'tfstate'
+            backendAzureRmKey: 'pre-prod.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'custom'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+            outputTo: 'console'
+            customCommand: 'fmt'
+            environmentServiceNameAzureRM: 'B18_Service_Connection'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+            environmentServiceNameAzureRM: 'B18_Service_Connection'
+
+  - stage: manual_approval
+    displayName: Manual Approval
+    jobs:
+      - job: manual_approval
+        displayName: Manual Approval
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'paras.tayde11@gmail.com'
+            approvers: 'paras.tayde10@gmail.com'
+            onTimeout: 'resume'
+
+  - stage: terraform_apply
+    displayName: Terraform Apply
+    jobs:
+     - job: terraform_init_apply
+       displayName: Terraform init apply
+       steps:
+       - task: TerraformInstaller@1
+         inputs:
+           terraformVersion: 'latest'
+
+       - task: TerraformTask@5
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+           backendServiceArm: 'B18_Service_Connection'
+           backendAzureRmStorageAccountName: 'infrabackendstg'
+           backendAzureRmContainerName: 'tfstate'
+           backendAzureRmKey: 'pre-prod.tfstate'
+
+       - task: TerraformTask@5
+         inputs:
+           provider: 'azurerm'
+           command: 'apply'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
+           environmentServiceNameAzureRM: 'B18_Service_Connection'
