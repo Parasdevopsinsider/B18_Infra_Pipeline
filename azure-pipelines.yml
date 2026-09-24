@@ -20,7 +20,7 @@ stages:
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
             backendServiceArm: 'B18_Service_Connection'
-            backendAzureRmStorageAccountName: 'infrabackendstg'
+            backendAzureRmStorageAccountName: 'backendinfrastg'
             backendAzureRmContainerName: 'tfstate'
             backendAzureRmKey: 'pre-prod.tfstate'
 
@@ -67,7 +67,7 @@ stages:
        steps:
        - task: TerraformInstaller@1
          inputs:
-           terraformVersion: 'latest'
+           terraformVersion: 'v1.5.7'
 
        - task: TerraformTask@5
          inputs:
@@ -75,7 +75,7 @@ stages:
            command: 'init'
            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
            backendServiceArm: 'B18_Service_Connection'
-           backendAzureRmStorageAccountName: 'infrabackendstg'
+           backendAzureRmStorageAccountName: backendinfrastg'
            backendAzureRmContainerName: 'tfstate'
            backendAzureRmKey: 'pre-prod.tfstate'
 
