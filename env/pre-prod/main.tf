@@ -4,6 +4,7 @@ module "rg" {
 }
 
 module "stg" {
+    depends_on = [ module.rg ]
   source  = "../../module/storage_account"
   stg_dev = var.stg_dev1
 }
