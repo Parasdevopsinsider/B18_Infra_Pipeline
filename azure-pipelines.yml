@@ -23,9 +23,7 @@ stages:
               
               echo "===== Storage Account Access ====="
               az storage container list
-              --account-name backendinfrastg
-              --auth-mode login
-              -o table
+              --account-name backendinfrastg --auth-mode login -o table
           
         - task: TerraformTask@5
           inputs:
