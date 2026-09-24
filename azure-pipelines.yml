@@ -57,8 +57,8 @@ stages:
         steps:
         - task: ManualValidation@1
           inputs:
-            notifyUsers: 'paras.tayde10@gmail.com'
-            approvers: 'paras.tayde10@gmail.com'
+            notifyUsers: 'paras.tayde11@gmail.com'
+            approvers: 'paras.tayde11@gmail.com'
             onTimeout: 'resume'
 
   - stage: terraform_apply
