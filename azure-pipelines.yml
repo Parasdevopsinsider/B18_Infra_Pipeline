@@ -88,7 +88,7 @@ stages:
            command: 'init'
            workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
            backendServiceArm: 'B18_Service_Connection'
-           backendAzureRmStorageAccountName: backendinfrastg'
+           backendAzureRmStorageAccountName: 'backendinfrastg'
            backendAzureRmContainerName: 'tfstate'
            backendAzureRmKey: 'pre-prod.tfstate'
 
