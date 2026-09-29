@@ -7,7 +7,7 @@ rg_dev1 = {
 
 stg_dev1 = {
   stg1 = {
-    stg_name                 = "stgdev1"
+    stg_name                 = "stgkaju1"
     rg_name                  = "rg-dev-1"
     location                 = "East US"
     account_tier             = "Standard"
