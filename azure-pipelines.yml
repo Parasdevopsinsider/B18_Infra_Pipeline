@@ -47,6 +47,33 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/env/pre-prod'
             environmentServiceNameAzureRM: 'B18_Service_Connection'
+  - stage: infra_scanning
+    displayName: Infra Scanning
+    jobs:
+    - job: infra_scanning
+      displayName: Infra Scanning
+      continueOnError: true
+      steps:
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            set -e
+            
+            echo "Installing TFLint..."
+            
+            curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+            
+            echo "TFLint version:"
+            tflint --version
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            - script: |
+                tflint --init
+                tflint --recursive
+              displayName: 'TFLint Scan'
 
   - stage: manual_approval
     displayName: Manual Approval
